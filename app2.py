@@ -266,7 +266,7 @@ def main() :
        #idx_client=247416
        #similar_id2 = load_neighbors2(data_test, idx_client)
        #similar_id2 = load_neighbors2(X_test,1)
-       #st.write( "", "similar_id2")
+       st.write( "", "ok")
        
     else:
          st.markdown("<i>…</i>", unsafe_allow_html=True) 
