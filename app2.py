@@ -55,8 +55,8 @@ def main() :
         return data_client
 
     @st.cache_data
-    def load_neighbors(data_test, idx_client):
-        data_client = data_test.copy().loc[idx_client]
+    def load_neighbors1(data_test, idx_client):
+        data_client = X_test.copy().loc[idx_client]
         data_train_rm = sample.drop(columns=["TARGET"], axis=1)
         knn = NearestNeighbors(n_neighbors=10, algorithm="auto").fit(data_train_rm)
         distances, indices = knn.kneighbors(data_client.values.reshape(1, -1))
