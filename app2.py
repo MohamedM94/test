@@ -12,10 +12,8 @@ from sklearn.neighbors import NearestNeighbors
 # Change the console encoding
 sys.stdout.reconfigure(encoding='utf-8')
 
-
 def main() :
 
-    
     @st.cache_data
     def load_data():
         data = pd.read_csv("donnees_train_essai.csv", index_col='SK_ID_CURR',encoding ='utf-8')
