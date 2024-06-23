@@ -55,7 +55,7 @@ def main() :
         return data_client
 
     @st.cache_data
-    def load_neighbors1(data_test, idx_client):
+    def load_neighbors1(X_test, idx_client):
         data_client = X_test.copy().loc[idx_client]
         data_train_rm = data.drop(columns=["TARGET"], axis=1)
         knn = NearestNeighbors(n_neighbors=10, algorithm="auto").fit(data_train_rm)
@@ -262,6 +262,8 @@ def main() :
 
 #Feature importance / description
     if st.checkbox("Affichage des dossiers similaires 4 ?",key="Option4"):
+       data_test = pd.read_csv("donnees_test_essai.csv")
+       similar_id = load_neighbors(data_test, idx_client)
        #similar_id2 = load_neighbors2(X_test,1)
        st.write( "", "similar_id2")
        
