@@ -260,8 +260,8 @@ def main() :
 
 #Feature importance / description
     if st.checkbox("Affichage des dossiers similaires 4 ?",key="Option4"):
-       similar_id2 = load_neighbors2(X_test,1)
-       st.write( "", similar_id2)
+       #similar_id2 = load_neighbors2(X_test,1)
+       #st.write( "", similar_id2)
        
     else:
         st.markdown("<i>…</i>", unsafe_allow_html=True) 
