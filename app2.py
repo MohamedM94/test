@@ -31,7 +31,7 @@ def main() :
     @st.cache_data
     def load_model():
         '''loading the trained model'''
-        pickle_in = open('model.pkl', 'rb') 
+        pickle_in = open('model12.pkl', 'rb') 
         clf = pickle.load(pickle_in) 
         return clf    
     
@@ -195,7 +195,7 @@ def main() :
     #Customer solvability display
     st.header(" ANALYSE CREDIT DEMANDE ")
     prediction,statut = load_prediction(sample,X_test, chk_id, clf)
-    st.write("  : {:.0f} %".format(round(float(prediction)*100, 2)))
+    st.write(" PROBABLITE DE DEFAUT : {:.0f} %".format(round(float(prediction)*100, 2)))
     st.write("STATUT DU CLIENT : ",statut)
     
     
