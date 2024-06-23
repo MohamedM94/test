@@ -30,7 +30,7 @@ def main() :
     @st.cache_data
     def load_model():
         '''loading the trained model'''
-        pickle_in = open('model_LGBM_10.pkl', 'rb') 
+        pickle_in = open('model.pkl', 'rb') 
         clf = pickle.load(pickle_in) 
         return clf    
     
