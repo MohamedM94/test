@@ -69,13 +69,7 @@ def main() :
         df_income = pd.DataFrame(sample["AMT_INCOME_TOTAL"])
         df_income = df_income.loc[df_income['AMT_INCOME_TOTAL'] < 200000, :]
         return df_income
-    
-    
-    ###########################################################
-#######################  Comparaison  #####################
-###########################################################
-
-   @st.cache_data
+    @st.cache_data
     def load_neighbors(data_test, idx_client):
         data_client = data_test.copy().loc[idx_client]
         knn = NearestNeighbors(n_neighbors=10, algorithm="auto").fit(data_train_rm)
