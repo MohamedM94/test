@@ -8,6 +8,7 @@ import plotly.express as px
 import pickle
 import shap
 from lightgbm import LGBMClassifier
+from sklearn.neighbors import NearestNeighbors
 # Change the console encoding
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -17,9 +18,9 @@ def main() :
     
     @st.cache_data
     def load_data():
-        data = pd.read_csv("donnees_train_essai.csv", index_col='SK_ID_CURR')
-        sample = pd.read_csv("donnees_train_essai.csv")
-        X_test = pd.read_csv("X_test_essai35.csv")
+        data = pd.read_csv("donnees_train_essai.csv", index_col='SK_ID_CURR',encoding ='utf-8')
+        sample = pd.read_csv("donnees_train_essai.csv",encoding ='utf-8')
+        X_test = pd.read_csv("donnees_test_essai.csv",encoding ='utf-8')
         #X_test.drop('SK_ID_CURR', axis=1, inplace=True)
         #X_test.drop('Unnamed: 0', axis=1, inplace=True)
         #X_test.drop('Unnamed: 0.1', axis=1, inplace=True)        
@@ -30,7 +31,7 @@ def main() :
     @st.cache_data
     def load_model():
         '''loading the trained model'''
-        pickle_in = open('model12.pkl', 'rb') 
+        pickle_in = open('model.pkl', 'rb') 
         clf = pickle.load(pickle_in) 
         return clf    
     
@@ -58,7 +59,7 @@ def main() :
 
     @st.cache_data
     def load_age_population(data):
-        data_age = round(-(data["DAYS_BIRTH"]/365), 2)
+        data_age = round(-(data["DAYS_BIRTH"]/1), 2)
         return data_age
     
    
@@ -67,7 +68,7 @@ def main() :
     def load_income_population(sample):
         df_income = pd.DataFrame(sample["AMT_INCOME_TOTAL"])
         df_income = df_income.loc[df_income['AMT_INCOME_TOTAL'] < 200000, :]
-        return df_income
+        return df_income 
     
     
     @st.cache_data
@@ -140,16 +141,35 @@ def main() :
     if st.checkbox("AFFICHER LES INFORMATIONS SUR LE CLIENT ?",key="option1"):
         infos_client = identite_client(data, chk_id)
         st.write(" SEXE: ", infos_client["CODE_GENDER"].values[0])
-        st.write(" AGE : {:.0f} ans".format(int(infos_client["DAYS_BIRTH"]/-365)))
-        st.write("SITUATION DE FAMILLE : ", infos_client["NAME_FAMILY_STATUS"].values[0])
+        st.write(" AGE : {:.0f} ans".format(int(infos_client["DAYS_BIRTH"]/-1)))
+        
+        
+        if(infos_client["NAME_FAMILY_STATUS_Civil marriage"].values[0] == 1.0) :
+            st.write("SITUATION DE FAMILLE : ", 'Civil marriage')
+            
+        if(infos_client["NAME_FAMILY_STATUS_Married"].values[0] == 1.0) :
+            st.write("SITUATION DE FAMILLE : ", 'Marié(e)')    
+        
+        if(infos_client["NAME_FAMILY_STATUS_Separated"].values[0] == 1.0) :
+            st.write("SITUATION DE FAMILLE : ", 'Séparé(e)') 
+            
+        if(infos_client["NAME_FAMILY_STATUS_Single / not married"].values[0] == 1.0) :
+            st.write("SITUATION DE FAMILLE : ", 'célibataire / non marié') 
+            
+        if(infos_client["NAME_FAMILY_STATUS_Unknown"].values[0] == 1.0) :
+            st.write("SITUATION DE FAMILLE : ", 'Inconnu(e)') 
+            
+        if (infos_client["NAME_FAMILY_STATUS_Widow"].values[0] == 1.0) :
+            st.write("SITUATION DE FAMILLE : ", 'Veuve')     
+        
         st.write("NOMBRE D'ENFANT : {:.0f}".format(infos_client["CNT_CHILDREN"].values[0]))
-
+        
         
         #Age distribution plot
         data_age = load_age_population(data)
         fig, ax = plt.subplots(figsize=(10, 5))
         sns.histplot(data_age, edgecolor = 'k', color="#D54773",bins=20)
-        ax.axvline(int(-infos_client["DAYS_BIRTH"].values /365), color="black", linestyle='--')
+        ax.axvline(int(-infos_client["DAYS_BIRTH"].values /1), color="black", linestyle='--')
         ax.set(title='AGE CLIENT', xlabel='AGE', ylabel='')
         st.pyplot(fig)
 
@@ -175,7 +195,7 @@ def main() :
     #Customer solvability display
     st.header(" ANALYSE CREDIT DEMANDE ")
     prediction,statut = load_prediction(sample,X_test, chk_id, clf)
-    st.write(" PROBABLITE DE DEFAUT : {:.0f} %".format(round(float(prediction)*100, 2)))
+    st.write("  : {:.0f} %".format(round(float(prediction)*100, 2)))
     st.write("STATUT DU CLIENT : ",statut)
     
     
@@ -191,6 +211,22 @@ def main() :
         
     else:
         st.markdown("<i>…</i>", unsafe_allow_html=True)    
+    
+
+#Feature importance / description
+    if st.checkbox("Affichage des dossiers similaires ?",key="Option3"):
+        nbligne=sample.loc[sample['SK_ID_CURR'] == int(chk_id)].index.item()
+        fig, ax = plt.subplots(figsize=(10, 10))
+        explainer = shap.Explainer(clf)
+        shap_values = explainer.shap_values(X_test)
+        shap_vals = explainer(X_test)
+        shap.waterfall_plot(shap_vals[nbligne][:, 0],show = False)
+        st.pyplot(fig)
+        
+    else:
+        st.markdown("<i>…</i>", unsafe_allow_html=True)    
+    
+    
     
     
 if __name__ == '__main__':
