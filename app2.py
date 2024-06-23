@@ -230,8 +230,9 @@ def main() :
 
 #Feature importance / description
     if st.checkbox("Affichage des dossiers similaires ?",key="Option3"):
-       similar_id = load_neighbors1(X_test,chk_id)
+       similar_id = load_neighbors1(X_test,int(chk_id))
        st.write( "", similar_id)
+       st.write( "", int(chk_id))
 
     
     else:
