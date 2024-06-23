@@ -229,7 +229,7 @@ def main() :
 
        #idn= X_test.loc[X_test['SK_ID_CURR'] == int(chk_id)].index.item()
        nbligne=sample.loc[sample['SK_ID_CURR'] == int(chk_id)].index.item()
-       similar_id = load_neighbors1(X_test,nbligne)
+       similar_id = load_neighbors(X_test,nbligne)
        st.write( "", similar_id)
        #st.write( "", int(chk_id))
         #st.write( "", "ok")
