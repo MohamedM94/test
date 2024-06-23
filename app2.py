@@ -69,23 +69,7 @@ def main() :
         df_income = pd.DataFrame(sample["AMT_INCOME_TOTAL"])
         df_income = df_income.loc[df_income['AMT_INCOME_TOTAL'] < 200000, :]
         return df_income
-    @st.cache_data
-    def load_neighbors(data_test, idx_client):
-        data_client = data_test.copy().loc[idx_client]
-        knn = NearestNeighbors(n_neighbors=10, algorithm="auto").fit(data_train_rm)
-        distances, indices = knn.kneighbors(data_client.values.reshape(1, -1))
-        print("indices")
-        print(indices)
-        print("distances")
-        print(distances)
-        df_neighbors = data_train.iloc[indices[0], :]
 
-        return df_neighbors
-    
-    
-    
-    
-    
     @st.cache_data
     def (sample,X_test, chk_id, _clf):
         data_ID=sample[['SK_ID_CURR']]
