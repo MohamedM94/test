@@ -53,8 +53,26 @@ def main() :
     def identite_client(data, id):
         data_client = data[data.index == int(id)]
         return data_client
-  
 
+    @st.cache_data
+   def load_neighbors(data_test, idx_client):
+        data_client = data_test.copy().loc[idx_client]
+       
+        data_train_rm = sample.drop(columns=["TARGET"], axis=1)
+        knn = NearestNeighbors(n_neighbors=10, algorithm="auto").fit(data_train_rm)
+    
+        distances, indices = knn.kneighbors(data_client.values.reshape(1, -1))
+    
+        print("indices")
+        print(indices)
+        print("distances")
+        print(distances)
+    
+        df_neighbors = sample.iloc[indices[0], :]
+    
+        return df_neighbors
+
+    
     @st.cache_data
     def load_age_population(data):
         data_age = round(-(data["DAYS_BIRTH"]/1), 2)
@@ -218,13 +236,7 @@ def main() :
 
 #Feature importance / description
     if st.checkbox("Affichage des dossiers similaires ?",key="Option3"):
-        nbligne=sample.loc[sample['SK_ID_CURR'] == int(chk_id)].index.item()
-        fig, ax = plt.subplots(figsize=(10, 10))
-        explainer = shap.Explainer(clf)
-        shap_values = explainer.shap_values(X_test)
-        shap_vals = explainer(X_test)
-        shap.waterfall_plot(shap_vals[nbligne][:, 0],show = False)
-        st.pyplot(fig)
+       similar_id = load_neighbors(X_test,id_client)
         
     else:
         st.markdown("<i>…</i>", unsafe_allow_html=True)    
