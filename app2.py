@@ -141,8 +141,13 @@ def main() :
     if st.checkbox("AFFICHER LES INFORMATIONS SUR LE CLIENT ?",key="option1"):
         infos_client = identite_client(data, chk_id)
         st.write(" SEXE: ", infos_client["CODE_GENDER"].values[0])
-        st.write(" AGE : {:.0f} ans".format(int(infos_client["DAYS_BIRTH"]/-1)))
         
+        if(infos_client["CODE_GENDER"].values[0] == 0.0) :
+            st.write("SITUATION DE FAMILLE : ", 'Homme') 
+            
+        if(infos_client["CODE_GENDER"].values[0] == 1.0) :
+            st.write("SITUATION DE FAMILLE : ", 'Femme')  
+        st.write(" AGE : {:.0f} ans".format(int(infos_client["DAYS_BIRTH"]/-1)))
         
         if(infos_client["NAME_FAMILY_STATUS_Civil marriage"].values[0] == 1.0) :
             st.write("SITUATION DE FAMILLE : ", 'Civil marriage')
