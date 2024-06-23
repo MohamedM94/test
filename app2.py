@@ -253,20 +253,20 @@ def main() :
 
 #Feature importance / description
     if st.checkbox("Affichage des dossiers similaires ?",key="Option3"):
-       #similar_id = load_neighbors1(X_test,1)
-       #st.write( "", similar_id)
-       #st.write( "", int(chk_id))
-        st.write( "", "ok")
+       similar_id = load_neighbors1(X_test,1)
+       st.write( "", similar_id)
+       st.write( "", int(chk_id))
+        #st.write( "", "ok")
     else:
         st.markdown("<i>…</i>", unsafe_allow_html=True)    
 
 #Feature importance / description
     if st.checkbox("Affichage des dossiers similaires 4 ?",key="Option4"):
-       data_test = pd.read_csv("donnees_test_essai.csv")
-       idx_client=247416
-       similar_id2 = load_neighbors2(data_test, idx_client)
+       #data_test = pd.read_csv("donnees_test_essai.csv")
+       #idx_client=247416
+       #similar_id2 = load_neighbors2(data_test, idx_client)
        #similar_id2 = load_neighbors2(X_test,1)
-       st.write( "", "similar_id2")
+       #st.write( "", "similar_id2")
        
     else:
          st.markdown("<i>…</i>", unsafe_allow_html=True) 
