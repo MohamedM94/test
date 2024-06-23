@@ -231,7 +231,7 @@ def main() :
 #Feature importance / description
     if st.checkbox("Affichage des dossiers similaires ?",key="Option3"):
        similar_id = load_neighbors(X_test,id_client)
-        
+       st.write("SITUATION DE FAMILLE : ", similar_id)
     else:
         st.markdown("<i>…</i>", unsafe_allow_html=True)    
     
