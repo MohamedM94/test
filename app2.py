@@ -14,6 +14,11 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 def main() :
 
+    data_train = pd.read_csv("donnees_train_essai.csv")
+    data_train = data_train.reset_index(drop=True)
+    data_test = pd.read_csv("donnees_test_essai.csv")
+    data_test_rm = data_test.drop(columns=["SK_ID_CURR"], axis=1)
+    data_train_rm = data_train.drop(columns=["TARGET"], axis=1)
     @st.cache_data
     def load_data():
         data = pd.read_csv("donnees_train_essai.csv", index_col='SK_ID_CURR',encoding ='utf-8')
@@ -66,6 +71,23 @@ def main() :
         print(distances)
         df_neighbors = data.iloc[indices[0], :]
         return df_neighbors
+        
+    @st.cache_data
+    def load_neighbors2(data_test, idx_client):
+        data_client = X_test.copy().loc[idx_client]
+        data_train_rm = data.drop(columns=["TARGET"], axis=1)
+        knn = NearestNeighbors(n_neighbors=10, algorithm="auto").fit(data_train_rm)
+        distances, indices = knn.kneighbors(data_client.values.reshape(1, -1))
+        print("indices")
+        print(indices)
+        print("distances")
+        print(distances)
+        df_neighbors = data.iloc[indices[0], :]
+        return df_neighbors
+
+
+
+    
          
     @st.cache_data
     def load_age_population(data):
@@ -233,12 +255,16 @@ def main() :
        similar_id = load_neighbors1(X_test,1)
        st.write( "", similar_id)
        st.write( "", int(chk_id))
-
-    
     else:
         st.markdown("<i>…</i>", unsafe_allow_html=True)    
-    
-    
+
+#Feature importance / description
+    if st.checkbox("Affichage des dossiers similaires 4 ?",key="Option4"):
+       similar_id2 = load_neighbors2(X_test,1)
+       st.write( "", similar_id2)
+       
+    else:
+        st.markdown("<i>…</i>", unsafe_allow_html=True) 
     
     
 if __name__ == '__main__':
