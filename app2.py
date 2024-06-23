@@ -262,7 +262,7 @@ def main() :
 
 #Feature importance / description
     if st.checkbox("Affichage des dossiers similaires 4 ?",key="Option4"):
-       #data_test = pd.read_csv("donnees_test_essai.csv")
+       data_test = pd.read_csv("donnees_test_essai.csv")
        idx_client=247416
        similar_id2 = load_neighbors2(data_test, idx_client)
        #similar_id2 = load_neighbors2(X_test,1)
