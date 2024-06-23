@@ -57,14 +57,14 @@ def main() :
     @st.cache_data
     def load_neighbors1(data_test, idx_client):
         data_client = X_test.copy().loc[idx_client]
-        data_train_rm = sample.drop(columns=["TARGET"], axis=1)
+        data_train_rm = data.drop(columns=["TARGET"], axis=1)
         knn = NearestNeighbors(n_neighbors=10, algorithm="auto").fit(data_train_rm)
         distances, indices = knn.kneighbors(data_client.values.reshape(1, -1))
         print("indices")
         print(indices)
         print("distances")
         print(distances)
-        df_neighbors = sample.iloc[indices[0], :]
+        df_neighbors = data.iloc[indices[0], :]
         return df_neighbors
          
     @st.cache_data
