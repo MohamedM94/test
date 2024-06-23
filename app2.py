@@ -255,6 +255,7 @@ def main() :
     if st.checkbox("Affichage des dossiers similaires ?",key="Option3"):
 
        #idn= X_test.loc[X_test['SK_ID_CURR'] == int(chk_id)].index.item()
+       nbligne=sample.loc[sample['SK_ID_CURR'] == int(chk_id)].index.item()
        similar_id = load_neighbors1(X_test,nbligne)
        st.write( "", similar_id)
        #st.write( "", int(chk_id))
