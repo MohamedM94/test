@@ -14,11 +14,6 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 def main() :
 
-    data_train = pd.read_csv("donnees_train_essai.csv")
-    data_train = data_train.reset_index(drop=True)
-    data_test = pd.read_csv("donnees_test_essai.csv")
-    data_test_rm = data_test.drop(columns=["SK_ID_CURR"], axis=1)
-    data_train_rm = data_train.drop(columns=["TARGET"], axis=1)
     @st.cache_data
     def load_data():
         data = pd.read_csv("donnees_train_essai.csv", index_col='SK_ID_CURR',encoding ='utf-8')
@@ -74,6 +69,12 @@ def main() :
         
     @st.cache_data
     def load_neighbors2(data_test, idx_client):
+
+        data_train = pd.read_csv("donnees_train_essai.csv")
+        data_train = data_train.reset_index(drop=True)
+        data_test = pd.read_csv("donnees_test_essai.csv")
+        data_test_rm = data_test.drop(columns=["SK_ID_CURR"], axis=1)
+        data_train_rm = data_train.drop(columns=["TARGET"], axis=1)
         data_client = X_test.copy().loc[idx_client]
         data_train_rm = data.drop(columns=["TARGET"], axis=1)
         knn = NearestNeighbors(n_neighbors=10, algorithm="auto").fit(data_train_rm)
